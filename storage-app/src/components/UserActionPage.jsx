@@ -1,12 +1,25 @@
 import {useEffect, useState} from 'react';
 import EditUserInfo from './EditUserInfo';
+import DeleteCertainUser from './DeleteCertainUser';
 import Overlay from './Overlay';
 
 function UserActionPage(){
     const [userList, setUserList] = useState([]);
     const [selectedUser, setSelectedUser] = useState(null);
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-  
+    
+    const getUserRole = (status) => {
+        switch (status) {
+            case "1":
+                return 'Admin';
+            case "2":
+                return 'Noliktava';
+            case "3":
+                return 'Plaukti';
+            default:
+                return 'Insignificant';
+        }
+    };
     useEffect(() => {
       fetch('http://localhost:8888/storage/utilities/getUsers.php')
         .then(response => {
@@ -34,6 +47,12 @@ function UserActionPage(){
       setSelectedUser(null);
       setIsEditModalOpen(false);
     };
+
+    const handleDeleteUser = (userID) => {
+        setUserList((prevUserList) => prevUserList.filter(user => user.userID !== userID));
+        setIsEditModalOpen(false);
+        setSelectedUser(null);
+    };
     return(
         <div className="min-h-full w-full flex flex-col">
             <div className='w-100 min-h-screen flex flex-col items-center overflow-auto'>
@@ -47,6 +66,8 @@ function UserActionPage(){
                     {userList.map((user) => (
                         <div key={user.userID} className='border-2 border-neutral-400 flex flex-col justify-center text-center items-center w-[300px] h-[200px] m-4 cursor-pointer hover:bg-neutral-200 hover:border-neutral-600 transition duration-300 ease-in-out' id={`userBox${user.userID}`} onClick={() => handleUserClick(user)}>
                             <h1 className='text-3xl font-medium my-4'>{user.username}</h1>
+                            <h1 className='text-3xl font-medium my-4'>{getUserRole(user.roleID)}</h1>
+                            <DeleteCertainUser userID={user.userID} username={user.username} onDelete={() => handleDeleteUser(user.userID, user.username)} />
                         </div>
                     ))}
                 </div>

@@ -2,27 +2,26 @@ function DeleteCertainUser({ userID, username, onDelete }) {
     const handleDeleteUser = async (event) => {
         event.stopPropagation();
 
-        const isConfirmed = window.confirm(`Are you sure you want to delete ${username}?`);
-
+        const isConfirmed = window.confirm(`Are you sure you want to delete user "${username}"?`);
         if (isConfirmed) {
-        try {
-            const response = await fetch(`http://localhost:8888/storage/utilities/deleteUser.php?userID=${userID}`, {
-            method: 'GET',
-            });
+            try {
+                const response = await fetch(`http://localhost:8888/storage/utilities/deleteUser.php?userID=${userID}`, {
+                method: 'GET',
+                });
 
-            console.log('Response Status:', response.status);
+                console.log('Response Status:', response.status);
 
-            if (response.ok) {
-            const data = await response.json();
-            console.log('User ID:', data.userID);
-            onDelete(userID);
-            } else {
-            const text = await response.text(); 
-            console.error('Task deletion failed. Response:', text);
+                if (response.ok) {
+                    const data = await response.json();
+                    console.log('User ID:', data.userID);
+                    onDelete(userID);
+                } else {
+                    const text = await response.text(); 
+                    console.error('Task deletion failed. Response:', text);
+                }
+            } catch (error) {
+                console.error('Error:', error);
             }
-        } catch (error) {
-            console.error('Error:', error);
-        }
         }
     };
     

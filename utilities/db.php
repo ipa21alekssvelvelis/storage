@@ -51,6 +51,10 @@ class Database{
         }
     }
 
+    function deleteCertainUser($id){
+        $result = $this->select("DELETE FROM users WHERE userID = '$id'");
+    }
+
     function updateCertainUser($id, $usernameToUpdate, $passwordToUpdate, $roleToUpdate){
         $query = "UPDATE users 
                   SET `username` = '$usernameToUpdate', `password` = '$passwordToUpdate', `roleID` = $roleToUpdate

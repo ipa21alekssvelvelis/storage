@@ -30,6 +30,7 @@ function UserActionPage(){
         })
         .then(response => {
           setUserList(response.data);
+          setFilteredUsers(response.data);
         //   console.log(response.data);
         })
         .catch(error => {
@@ -48,7 +49,7 @@ function UserActionPage(){
     };
 
     const handleDeleteUser = (userID) => {
-        setUserList((prevUserList) => prevUserList.filter(user => user.userID !== userID));
+        setFilteredUsers((prevUserList) => prevUserList.filter(user => user.userID !== userID));
         setIsEditModalOpen(false);
         setSelectedUser(null);
     };
@@ -56,7 +57,8 @@ function UserActionPage(){
     const [isSearchFocused, setIsSearchFocused] = useState(false);
     const [searchValue, setSearchValue] = useState('');
     const [filteredUsers, setFilteredUsers] = useState([]);
-
+    const [noMatch, setNoMatch] = useState(false);
+    
     const handleSearchChange = (e) => {
         const query = e.target.value.toLowerCase();
         setSearchValue(query);
@@ -68,19 +70,19 @@ function UserActionPage(){
         );
     
         setFilteredUsers(filtered);
+        setNoMatch(filtered.length === 0);
     };
-    
     return(
         <div className="min-h-full w-full flex flex-col">
             <div className='w-100 min-h-screen flex flex-col items-center overflow-auto'>
                 <div className="border-b border-[#e5e7eb] dark:border-[#282f35] w-[85%] my-12 flex">
                     <div className='flex flex-col mx-6 w-full justify-center text-center'>
-                        <h1 className="text-6xl mb-2 font-bold text-neutral-700 dark:text-[#b6c2cf]">User List</h1>
-                        <div className='flex w-full justify-center'>
-                            <div className='flex w-[90%] justify-center ml-[15%]'>
-                            <p className="text-3xl mb-2 font-normal text-neutral-700 dark:text-[#b6c2cf]">Exact your discord privileges</p>
+                        <h1 className="text-6xl mb-2 font-bold text-neutral-700 dark:text-[#b6c2cf] my-2">User List</h1>
+                        <div className='flex w-full justify-center max-[600px]:flex-col'>
+                            <div className='flex w-[90%] justify-center ml-[15%] max-[600px]:ml-0 max-[600px]:w-full my-2'>
+                            <p className="text-3xl mb-2 font-normal text-neutral-700">Exact your discord privileges</p>
                             </div>
-                            <div className="flex items-center justify-center">
+                            <div className="flex items-center justify-center my-2">
                             <div className="relative">
                                 <input 
                                     type="text" 
@@ -105,6 +107,7 @@ function UserActionPage(){
                     </div>
                 </div>
                 <div className='flex flex-wrap flex-grow w-full h-full justify-center '>
+                {noMatch && <p className='max-[320px]:text-2xl text-3xl '>No users match your search</p>}
                     {filteredUsers.map((user) => (
                         <div key={user.userID} className='border-2 border-neutral-400 flex flex-col justify-center text-center items-center w-[300px] h-[200px] m-4 cursor-pointer hover:bg-neutral-200 hover:border-neutral-600 transition duration-300 ease-in-out' id={`userBox${user.userID}`} onClick={() => handleUserClick(user)}>
                             <h1 className='text-3xl font-medium my-4'>{user.username}</h1>

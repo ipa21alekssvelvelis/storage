@@ -72,7 +72,11 @@ function EditUserInfo({ user, onClose }) {
             if (response.ok) {
               const data = await response.json();
               if (data.error) {
-                console.error('Error:', data.error);
+                // console.error('Error:', data.error);
+                if(data.error === 'Username taken'){
+                    newErrors.username = data.error;
+                    setErrors(newErrors);
+                }
               } else {
                 setSubmissionStatus('Updated user');
                 console.log(data);

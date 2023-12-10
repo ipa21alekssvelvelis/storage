@@ -67,5 +67,16 @@ class Database{
             return false;
         }
     }
+
+    function InsertNewUser($username, $password, $roleID){
+        $result = $this->insert("INSERT INTO users 
+                                (`username`, `password`, `roleID`)
+                                VALUES ('$username', '$password', $roleID)");
+        if($result){
+            return $result;
+        }else{
+            return false;
+        }
+    }
 }
 ?>

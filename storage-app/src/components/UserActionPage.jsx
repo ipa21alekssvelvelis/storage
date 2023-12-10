@@ -1,5 +1,6 @@
 import {useEffect, useState} from 'react';
 import EditUserInfo from './EditUserInfo';
+import CreateNewUser from './CreateNewUser';
 import DeleteCertainUser from './DeleteCertainUser';
 import Overlay from './Overlay';
 
@@ -7,6 +8,7 @@ function UserActionPage(){
     const [userList, setUserList] = useState([]);
     const [selectedUser, setSelectedUser] = useState(null);
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+    const [isInsertModalOpen, setIsInsertModalOpen] = useState(false);
     
     const getUserRole = (status) => {
         switch (status) {
@@ -39,19 +41,37 @@ function UserActionPage(){
     }, []);
 
     const handleUserClick = (user) => {
-      setSelectedUser(user);
-      setIsEditModalOpen(true);
+        setSelectedUser(user);
+        setIsEditModalOpen(true);
     };
   
-    const handleCloseEdit = () => {
-      setSelectedUser(null);
-      setIsEditModalOpen(false);
+    const handleCloseModal = () => {
+        setSelectedUser(null);
+        setIsEditModalOpen(false);
+        setIsInsertModalOpen(false);
     };
 
     const handleDeleteUser = (userID) => {
         setFilteredUsers((prevUserList) => prevUserList.filter(user => user.userID !== userID));
         setIsEditModalOpen(false);
         setSelectedUser(null);
+    };
+
+    const handleUserInserted = () => {
+        fetch('http://localhost:8888/storage/utilities/getUsers.php')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(response => {
+                setUserList(response.data);
+                setFilteredUsers(response.data);
+            })
+            .catch(error => {
+                console.error('Error fetching data:', error);
+            });
     };
 
     const [isSearchFocused, setIsSearchFocused] = useState(false);
@@ -106,6 +126,11 @@ function UserActionPage(){
                         </div>
                     </div>
                 </div>
+                <div className='rounded-lg border py-3 w-1/4 max-[1240px]:w-1/2 max-[600px]:w-3/4 max-[320px]:w-[95%] mb-8 flex justify-center'>
+                    <button className='text-4xl w-full h-full' onClick={() => setIsInsertModalOpen(true)}>
+                        Create User
+                    </button>
+                </div>
                 <div className='flex flex-wrap flex-grow w-full h-full justify-center '>
                 {noMatch && <p className='max-[320px]:text-2xl text-3xl '>No users match your search</p>}
                     {filteredUsers.map((user) => (
@@ -117,9 +142,12 @@ function UserActionPage(){
                     ))}
                 </div>
             </div>
-            <Overlay isOpen={isEditModalOpen} onClose={handleCloseEdit} />
+            <Overlay isOpen={isEditModalOpen || isInsertModalOpen} onClose={handleCloseModal} />
             {selectedUser && (
-                <EditUserInfo user={selectedUser} onClose={handleCloseEdit} />
+                <EditUserInfo user={selectedUser} onClose={handleCloseModal} />
+            )}
+            {isInsertModalOpen && (
+                <CreateNewUser onClose={handleCloseModal} onUserInserted={handleUserInserted} />
             )}
         </div>
     );

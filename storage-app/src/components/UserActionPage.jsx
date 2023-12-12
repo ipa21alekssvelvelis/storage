@@ -92,6 +92,9 @@ function UserActionPage(){
         setFilteredUsers(filtered);
         setNoMatch(filtered.length === 0);
     };
+
+    const retrievedValue = localStorage.getItem('role');
+    console.log(retrievedValue);
     return(
         <div className="min-h-full w-full flex flex-col">
             <div className='w-100 min-h-screen flex flex-col items-center overflow-auto'>

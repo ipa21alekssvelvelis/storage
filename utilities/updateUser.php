@@ -15,6 +15,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $passwordToUpdate = $data->password;
     $roleToUpdate = $data->role;
 
+    
     $currentUsers = $db->selectUsers();
 
     $foundUser = false;
@@ -28,6 +29,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     if (!$foundUser) {
+        $passwordToUpdate = password_hash($passwordToUpdate, PASSWORD_DEFAULT);
         if ($db->updateCertainUser($userID, $usernameToUpdate, $passwordToUpdate, $roleToUpdate)) {
             $response['message'] = 'Updated successfully';
             echo json_encode($response);

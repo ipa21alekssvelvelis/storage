@@ -37,8 +37,8 @@ function CreateNewUser({ onCreateUser, onClose, onUserInserted }) {
           newErrors.username = 'Username is required.';
         } else if (trimmedUsername.length > 30) {
           newErrors.username = 'Username must be 30 characters or less.';
-        } else if (trimmedUsername.length < 5) {
-            newErrors.username = 'Username must be atleast 5 characters';
+        } else if (trimmedUsername.length < 4) {
+            newErrors.username = 'Username must be atleast 4 characters';
         } else if (trimmedUsername.match(/[!£$%^&*()+\[\]{};':"\\|,<>\/?]/)){
             newErrors.username = 'Username cannot contain symbols';
         }
@@ -75,7 +75,6 @@ function CreateNewUser({ onCreateUser, onClose, onUserInserted }) {
                 if (response.ok) {
                     const data = await response.json();
                     if (data.error) {
-                        // console.error('Error:', data.error);
                         if(data.error === 'Username taken'){
                             newErrors.username = data.error;
                             setErrors(newErrors);

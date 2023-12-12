@@ -1,6 +1,9 @@
 import React from "react";
 import Header from "./Header";
+import { getWithExpiry } from '../utils/localStorageUtils';
 function Storage() {
+    const role = getWithExpiry('role');
+    console.log(role);
     return (
         <>
             <Header></Header>

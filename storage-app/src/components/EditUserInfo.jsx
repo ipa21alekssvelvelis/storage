@@ -35,26 +35,33 @@ function EditUserInfo({ user, onClose }) {
         onClose();
     };
 
+    const [newPassword, setNewPassword] = useState('');
+
+    const handleChangeNewPassword = (event) => {
+        const { value } = event.target;
+        setNewPassword(value);
+    };
+
     const handleSubmitForm = async (e) => {
         e.preventDefault();
     
         const newErrors = {};
         const trimmedUsername = editedUser.username.trim();
-        const trimmedPassword = editedUser.password.trim();
+        const trimmedPassword = newPassword.trim();
     
         if (!trimmedUsername) {
           newErrors.username = 'Username is required.';
         } else if (trimmedUsername.length > 30) {
           newErrors.username = 'Username must be 30 characters or less.';
-        } else if (trimmedUsername.length < 5) {
-            newErrors.username = 'Username must be atleast 5 characters';
+        } else if (trimmedUsername.length < 4) {
+            newErrors.username = 'Username must be atleast 4 characters';
         } else if (trimmedUsername.match(/[!£$%^&*()+\[\]{};':"\\|,<>\/?]/)){
             newErrors.username = 'Username cannot contain symbols';
         }
     
         if (!trimmedPassword) {
           newErrors.password = 'Password is required.';
-        } else if (trimmedPassword.length > 8) {
+        } else if (trimmedPassword.length < 8) {
           newErrors.password = 'Password must be 8 characters or more.';
         }
     
@@ -120,14 +127,14 @@ function EditUserInfo({ user, onClose }) {
                 </div>
                 <div className='flex flex-col mx-4 my-4'>
                     <label className='text-xl mb-4'>
-                    Password:
+                    New Password:
                     </label>
                     <input
                         type="password"
                         name="password"
                         id="password"
-                        value={editedUser.password}
-                        onChange={handleChange}
+                        value={newPassword}
+                        onChange={handleChangeNewPassword}
                         className="indent-2 text-lg rounded-sm border-b-2"
                     />
                     {errors.password && <p className="text-red-500 my-2">{errors.password}</p>}

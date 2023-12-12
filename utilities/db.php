@@ -23,7 +23,6 @@ class Database{
             return false;
         }
     }
-    
 
     function select($query){
         return $this->conn->query($query);

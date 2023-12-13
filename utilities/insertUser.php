@@ -26,7 +26,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     if (!$foundUser) {
-        $password = password_hash($password, PASSWORD_DEFAULT);
+        // $password = password_hash($password, PASSWORD_DEFAULT);
         if ($db->InsertNewUser($username, $password, $roleID)) {
             $response['message'] = 'Inserted successfully';
             echo json_encode($response);

@@ -25,6 +25,33 @@ function CreateNewUser({ onCreateUser, onClose, onUserInserted }) {
         onClose();
     };
 
+    const [roleList, setRoleList] = useState([]);
+    useEffect(() => {
+        fetch('http://localhost:8888/storage/utilities/getRoles.php')
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(response => {
+            const retrievedValueString = localStorage.getItem('role');
+            const retrievedValue = JSON.parse(retrievedValueString).value;
+            const parsedValue = parseInt(retrievedValue, 10);
+            if(parsedValue === 4){
+                const rolesAvailable = response.data.filter(role => role.roleID !== "4");
+                setRoleList(rolesAvailable);
+            }else if (parsedValue === 1){
+                const rolesAvailable = response.data.filter(role => role.roleID !== "4" && role.roleID !== "1");
+                setRoleList(rolesAvailable);
+            }
+        })
+
+        .catch(error => {
+            console.error('Error fetching data:', error);
+        });
+    }, []);
+
     const handleUserSubmit = async (e) => {
         e.preventDefault();
         
@@ -162,8 +189,11 @@ function CreateNewUser({ onCreateUser, onClose, onUserInserted }) {
                     onChange={handleChange}
                     className="indent-2 text-lg rounded-sm border-b-2"
                     >
-                    <option value="2">Noliktava</option>
-                    <option value="3">Plaukti</option>
+                    {roleList.map((role) => (
+                        <option key={role.roleID} value={role.roleID}>
+                        {role.role}
+                        </option>
+                    ))}
                     </select>
                 </div>
                 <div className='text-center'>

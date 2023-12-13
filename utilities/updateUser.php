@@ -9,12 +9,10 @@ $db = new Database();
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $data = json_decode(file_get_contents("php://input"));
 
-
     $userID = $data->userID;
     $usernameToUpdate = $data->username;
     $passwordToUpdate = $data->password;
     $roleToUpdate = $data->role;
-
     
     $currentUsers = $db->selectUsers();
 
@@ -29,7 +27,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     if (!$foundUser) {
-        $passwordToUpdate = password_hash($passwordToUpdate, PASSWORD_DEFAULT);
+        // $passwordToUpdate = password_hash($passwordToUpdate, PASSWORD_DEFAULT);
         if ($db->updateCertainUser($userID, $usernameToUpdate, $passwordToUpdate, $roleToUpdate)) {
             $response['message'] = 'Updated successfully';
             echo json_encode($response);

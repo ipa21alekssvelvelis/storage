@@ -28,7 +28,7 @@ if (!$foundUser) {
     $response["error"] = "User not found";
 } else {
     $foundUserPass = $foundUser['password'];
-    if (password_verify($password, $foundUserPass)) {
+    if ($password == $foundUserPass) {
         $roleID = $foundUser['roleID'];
         $response["roleID"] = $roleID;
     } else {

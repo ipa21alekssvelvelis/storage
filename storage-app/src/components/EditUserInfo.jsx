@@ -2,11 +2,10 @@ import React, { useState, useEffect } from 'react';
 
 function EditUserInfo({ user, onClose }) {
 
-    const [roleList, setRoleList] = useState([]);
-
     const [errors, setErrors] = useState({});
     const [submissionStatus, setSubmissionStatus] = useState('');
 
+    const [roleList, setRoleList] = useState([]);
     useEffect(() => {
         fetch('http://localhost:8888/storage/utilities/getRoles.php')
         .then(response => {
@@ -16,14 +15,26 @@ function EditUserInfo({ user, onClose }) {
             return response.json();
         })
         .then(response => {
-            setRoleList(response.data);
+            const retrievedValueString = localStorage.getItem('role');
+            const retrievedValue = JSON.parse(retrievedValueString).value;
+            const parsedValue = parseInt(retrievedValue, 10);
+            if(parsedValue === 4){
+                const rolesAvailable = response.data.filter(role => role.roleID !== "4");
+                setRoleList(rolesAvailable);
+            }else if (parsedValue === 1){
+                const rolesAvailable = response.data.filter(role => role.roleID !== "4" && role.roleID !== "1");
+                setRoleList(rolesAvailable);
+            }
         })
+
         .catch(error => {
             console.error('Error fetching data:', error);
         });
     }, []);
-
-    const [editedUser, setEditedUser] = useState({ ...user });
+    // console.log(roleList)
+    const [editedUser, setEditedUser] = useState({
+        ...user, 
+    });
 
     const handleChange = (event) => {
         const { name, value } = event.target;
@@ -35,19 +46,12 @@ function EditUserInfo({ user, onClose }) {
         onClose();
     };
 
-    const [newPassword, setNewPassword] = useState('');
-
-    const handleChangeNewPassword = (event) => {
-        const { value } = event.target;
-        setNewPassword(value);
-    };
-
     const handleSubmitForm = async (e) => {
         e.preventDefault();
     
         const newErrors = {};
         const trimmedUsername = editedUser.username.trim();
-        const trimmedPassword = newPassword.trim();
+        const trimmedPassword = editedUser.password.trim();
     
         if (!trimmedUsername) {
           newErrors.username = 'Username is required.';
@@ -133,8 +137,8 @@ function EditUserInfo({ user, onClose }) {
                         type="password"
                         name="password"
                         id="password"
-                        value={newPassword}
-                        onChange={handleChangeNewPassword}
+                        value={editedUser.password}
+                        onChange={handleChange}
                         className="indent-2 text-lg rounded-sm border-b-2"
                     />
                     {errors.password && <p className="text-red-500 my-2">{errors.password}</p>}

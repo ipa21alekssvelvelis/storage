@@ -80,13 +80,25 @@ function UserActionPage(){
                 return response.json();
             })
             .then(response => {
-                if(retrievedValue !== 4){
-                    const nonAdminUsers = response.data.filter(user => user.roleID !== "1");
+                // if(retrievedValue !== 4){
+                //     const nonAdminUsers = response.data.filter(user => user.roleID !== "1");
+                //     setUserList(nonAdminUsers);
+                //     setFilteredUsers(nonAdminUsers);
+                // }else{
+                //     setUserList(response.data);
+                //     setFilteredUsers(response.data);
+                // }
+                const retrievedValueString = localStorage.getItem('role');
+                const retrievedValue = JSON.parse(retrievedValueString).value;
+                const parsedValue = parseInt(retrievedValue, 10);
+                if(parsedValue === 4){
+                    const nonAdminUsers = response.data.filter(user => user.roleID !== "4");
                     setUserList(nonAdminUsers);
                     setFilteredUsers(nonAdminUsers);
-                }else{
-                    setUserList(response.data);
-                    setFilteredUsers(response.data);
+                }else if (parsedValue === 1){
+                    const nonAdminUsers = response.data.filter(user => user.roleID !== "1" && user.roleID !== "4");
+                    setUserList(nonAdminUsers);
+                    setFilteredUsers(nonAdminUsers);
                 }
             })
             .catch(error => {

@@ -49,12 +49,6 @@ function EditUserInfo({ user, onClose, onUserUpdated }) {
         onClose();
     };
 
-
-    const [isPasswordRevealed, setIsPasswordRevealed] = useState(false);
-    const handlePasswordReveal = () => {
-        setIsPasswordRevealed((prev) => !prev);
-    };
-    console.log(isPasswordRevealed);
     const handleSubmitForm = async (e) => {
         e.preventDefault();
     

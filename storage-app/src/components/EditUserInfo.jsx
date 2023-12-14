@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-
-function EditUserInfo({ user, onClose }) {
+import PasswordToggle from './PasswordToggle';  
+function EditUserInfo({ user, onClose, onUserUpdated }) {
 
     const [errors, setErrors] = useState({});
     const [submissionStatus, setSubmissionStatus] = useState('');
@@ -26,26 +26,35 @@ function EditUserInfo({ user, onClose }) {
                 setRoleList(rolesAvailable);
             }
         })
-
         .catch(error => {
             console.error('Error fetching data:', error);
         });
     }, []);
-    // console.log(roleList)
+    // console.log(roleList);
     const [editedUser, setEditedUser] = useState({
         ...user, 
     });
 
     const handleChange = (event) => {
         const { name, value } = event.target;
-        setEditedUser((prevUser) => ({ ...prevUser, [name]: value }));
-        console.log(editedUser);
+        if (name === "role") {
+            setEditedUser((prevUser) => ({ ...prevUser, roleID: value }));
+        } else {
+            setEditedUser((prevUser) => ({ ...prevUser, [name]: value }));
+        }
+        // console.log(editedUser);
     };
 
     const handleCloseButton = () => {
         onClose();
     };
 
+
+    const [isPasswordRevealed, setIsPasswordRevealed] = useState(false);
+    const handlePasswordReveal = () => {
+        setIsPasswordRevealed((prev) => !prev);
+    };
+    console.log(isPasswordRevealed);
     const handleSubmitForm = async (e) => {
         e.preventDefault();
     
@@ -90,7 +99,13 @@ function EditUserInfo({ user, onClose }) {
                 }
               } else {
                 setSubmissionStatus('Updated user');
-                console.log(data);
+                setEditedUser({
+                    ...editedUser,
+                    username: trimmedUsername,
+                    password: trimmedPassword,
+                    roleID: editedUser.roleID,
+                });
+                onUserUpdated(editedUser);
               }
             } else {
               console.error('Submission failed');
@@ -129,18 +144,11 @@ function EditUserInfo({ user, onClose }) {
                     />
                     {errors.username && <p className="text-red-500 my-2">{errors.username}</p>}
                 </div>
-                <div className='flex flex-col mx-4 my-4'>
+                <div className='flex flex-col mx-4 my-4 relative'>
                     <label className='text-xl mb-4'>
                     New Password:
                     </label>
-                    <input
-                        type="password"
-                        name="password"
-                        id="password"
-                        value={editedUser.password}
-                        onChange={handleChange}
-                        className="indent-2 text-lg rounded-sm border-b-2"
-                    />
+                    <PasswordToggle value={editedUser.password} onChange={(e) => handleChange({ target: { name: 'password', value: e.target.value } })} />
                     {errors.password && <p className="text-red-500 my-2">{errors.password}</p>}
                 </div>
                 <div className='flex flex-col mx-4 my-4'>
@@ -154,6 +162,9 @@ function EditUserInfo({ user, onClose }) {
                     onChange={handleChange}
                     className="indent-2 text-lg rounded-sm border-b-2"
                     >
+                    {/* <option value="1">Admin</option>
+                    <option value="2">Noliktava</option>
+                    <option value="3">Plaukti</option> */}
                     {roleList.map((role) => (
                         <option key={role.roleID} value={role.roleID}>
                         {role.role}

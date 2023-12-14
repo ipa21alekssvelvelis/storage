@@ -94,6 +94,18 @@ function UserActionPage(){
             });
     };
 
+    const handleUserUpdated = (updatedUser) => {
+        const userIndex = userList.findIndex((user) => user.userID === updatedUser.userID);
+    
+        if (userIndex !== -1) {
+            const updatedList = [...userList];
+            updatedList[userIndex] = updatedUser;
+
+            setUserList(updatedList);
+            setFilteredUsers(updatedList);
+        }
+    };
+
     const [isSearchFocused, setIsSearchFocused] = useState(false);
     const [searchValue, setSearchValue] = useState('');
     const [filteredUsers, setFilteredUsers] = useState([]);
@@ -169,7 +181,7 @@ function UserActionPage(){
             </div>
             <Overlay isOpen={isEditModalOpen || isInsertModalOpen} onClose={handleCloseModal} />
             {selectedUser && (
-                <EditUserInfo user={selectedUser} onClose={handleCloseModal} />
+                <EditUserInfo user={selectedUser} onClose={handleCloseModal} onUserUpdated={handleUserUpdated} />
             )}
             {isInsertModalOpen && (
                 <CreateNewUser onClose={handleCloseModal} onUserInserted={handleUserInserted} />

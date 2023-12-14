@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-
+import PasswordToggle from './PasswordToggle';  
 function CreateNewUser({ onCreateUser, onClose, onUserInserted }) {
 
     const [errors, setErrors] = useState({});
@@ -153,28 +153,14 @@ function CreateNewUser({ onCreateUser, onClose, onUserInserted }) {
                     <label className='text-xl mb-4'>
                     Password:
                     </label>
-                    <input
-                        type="password"
-                        name="password"
-                        id="password"
-                        value={formData.password}
-                        onChange={handleChange}
-                        className="indent-2 text-lg rounded-sm border-b-2"
-                    />
+                    <PasswordToggle value={formData.password} onChange={(e) => handleChange({ target: { name: 'password', value: e.target.value } })} />
                     {errors.password && <p className="text-red-500 my-2">{errors.password}</p>}
                 </div>
                 <div className='flex flex-col mx-4 my-4'>
                     <label className='text-xl mb-4'>
                     Confirm password:
                     </label>
-                    <input
-                        type="password"
-                        name="confirmpassword"
-                        id="confirmpassword"
-                        value={formData.confirmpassword}
-                        onChange={handleChange}
-                        className="indent-2 text-lg rounded-sm border-b-2"
-                    />
+                    <PasswordToggle value={formData.confirmpassword} onChange={(e) => handleChange({ target: { name: 'confirmpassword', value: e.target.value } })} />
                     {errors.confirmpassword && <p className="text-red-500 my-2">{errors.confirmpassword}</p>}
                     {errors.match && <p className="text-red-500 my-2">{errors.match}</p>}
                 </div>

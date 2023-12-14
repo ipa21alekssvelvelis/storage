@@ -118,14 +118,14 @@ function UserActionPage(){
     return(
         <>
         <Header/>
-        <div className="min-h-full w-full flex flex-col bg-[#7393C6] text-white">
+        <div className="min-h-full w-full flex flex-col bg-[#96B1DC] text-white">
             <div className='w-100 min-h-screen flex flex-col items-center overflow-auto'>
                 <div className="border-b border-[#e5e7eb] dark:border-[#282f35] w-[85%] my-12 flex">
                     <div className='flex flex-col mx-6 w-full justify-center text-center'>
                         <h1 className="text-6xl mb-2 font-bold text-white my-2">User List</h1>
                         <div className='flex w-full justify-center max-[600px]:flex-col'>
                             <div className='flex w-[90%] justify-center ml-[15%] max-[600px]:ml-0 max-[600px]:w-full my-2'>
-                            <p className="text-3xl mb-2 font-normal text-neutral-200">Exact your discord privileges</p>
+                            <p className="text-3xl mb-2 font-normal">Exact your discord privileges</p>
                             </div>
                             <div className="flex items-center justify-center my-2">
                             <div className="relative">
@@ -135,14 +135,14 @@ function UserActionPage(){
                                     name="searchUser" 
                                     value={searchValue}
                                     onChange={handleSearchChange}
-                                    className={`indent-2 rounded-lg border py-2.5 focus:outline-none bg-[#7393C6] focus:border-neutral-200 focus:border-b-2 transition-colors peer ${isSearchFocused || searchValue ? 'focused' : ''}`}
+                                    className={`indent-2 rounded-lg border py-2.5 focus:outline-none bg-[#96B1DC] focus:border-neutral-200 focus:border-b-2 transition-colors peer ${isSearchFocused || searchValue ? 'focused' : ''}`}
                                     autoComplete="off"
                                     onFocus={() => setIsSearchFocused(true)}
                                     onBlur={() => setIsSearchFocused(false)}
                                 />
                                 <label
                                     htmlFor="searchUser"
-                                    className={`absolute top-2.5 left-2 cursor-text transition-all transform ${isSearchFocused || searchValue ? '-translate-y-[1.25rem] text-sm bg-[#7393C6]' : ''}`} 
+                                    className={`absolute top-2.5 left-2 cursor-text transition-all transform ${isSearchFocused || searchValue ? '-translate-y-[1.25rem] text-sm bg-[#96B1DC]' : ''}`} 
                                 >
                                     Search
                                 </label>
@@ -159,7 +159,7 @@ function UserActionPage(){
                 <div className='flex flex-wrap flex-grow w-full h-full justify-center '>
                 {noMatch && <p className='max-[320px]:text-2xl text-3xl '>No users match your search</p>}
                     {filteredUsers.map((user) => (
-                        <div key={user.userID} className='border-2 border-neutral-400 flex flex-col justify-center text-center items-center w-[300px] h-[200px] m-4 cursor-pointer bg-[#5D75B1] hover:bg-[#56699A] hover:border-neutral-200 transition duration-300 ease-in-out' id={`userBox${user.userID}`} onClick={() => handleUserClick(user)}>
+                        <div key={user.userID} className='border-2 flex flex-col justify-center text-center items-center w-[300px] h-[200px] m-4 cursor-pointer bg-[#5D75B1] hover:bg-[#56699A] hover:border-neutral-200 transition duration-300 ease-in-out' id={`userBox${user.userID}`} onClick={() => handleUserClick(user)}>
                             <h1 className='text-3xl font-medium my-4'>{user.username}</h1>
                             <h1 className='text-3xl font-medium my-4'>{getUserRole(user.roleID)}</h1>
                             <DeleteCertainUser userID={user.userID} username={user.username} onDelete={() => handleDeleteUser(user.userID, user.username)} />

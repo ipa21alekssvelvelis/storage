@@ -58,6 +58,7 @@ function Login() {
                         }
                     } else {
                         setWithExpiry('role', data.roleID, 60);
+                        setWithExpiry('username', data.username, 60);
                         window.location.href = 'http://localhost:3000/Storage';
                     }
                 } else {

@@ -29,7 +29,7 @@ class Database{
     }
 
     function selectUsers(){
-        $result = $this->select("SELECT * FROM users");
+        $result = $this->select("SELECT * FROM users ORDER BY roleID");
         if($result && $result->num_rows > 0){
             $data = [];
             while ($row = $result->fetch_assoc()) {

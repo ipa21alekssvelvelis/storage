@@ -31,6 +31,7 @@ if (!$foundUser) {
     if ($password == $foundUserPass) {
         $roleID = $foundUser['roleID'];
         $response["roleID"] = $roleID;
+        $response["username"] = $foundUser['username'];
     } else {
         $response["error"] = "Incorrect password";
     }
